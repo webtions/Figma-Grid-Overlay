@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<ruleset name="Figma Grid Overlay">
+    <description>WordPress Coding Standards for the Figma Grid Overlay plugin.</description>
+
+    <!-- Include plugin-specific folders -->
+    <file>figma-grid-overlay.php</file>
+    <file>includes/</file>
+    <file>admin/</file>
+
+    <!-- Use the official WordPress coding standards -->
+    <rule ref="WordPress" />
+
+    <!-- Optional: Allow missing file comments -->
+    <rule ref="Squiz.Commenting">
+        <exclude name="Squiz.Commenting.FileComment.Missing" />
+    </rule>
+
+    <!-- Optional: Suppress overly strict DB sniffing (not used in this plugin anyway) -->
+    <rule ref="WordPress.DB.DirectDatabaseQuery">
+        <exclude name="WordPress.DB.DirectDatabaseQuery.DirectQuery" />
+        <exclude name="WordPress.DB.DirectDatabaseQuery.NoCaching" />
+    </rule>
+
+    <!-- Optional: Allow non-snake_case class member variables -->
+    <rule ref="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar">
+        <exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar" />
+    </rule>
+
+    <!-- Optional: Relax spacing rule for arguments -->
+    <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpen">
+        <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpen" />
+    </rule>
+</ruleset>

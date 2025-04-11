@@ -1,0 +1,100 @@
+# Copyright (C) 2025 Harish Chouhan
+# This file is distributed under the GPL-3.0.
+msgid ""
+msgstr ""
+"Project-Id-Version: Figma Grid Overlay 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/figma-grid-overlay\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-04-11T13:23:55+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: figma-grid-overlay\n"
+
+#. Plugin Name of the plugin
+#: figma-grid-overlay.php
+#: admin/settings-page.php:17
+#: admin/settings-page.php:18
+#: admin/settings-page.php:33
+msgid "Figma Grid Overlay"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: figma-grid-overlay.php
+msgid "https://themeist.com/plugins/wordpress/figma-grid-layout/"
+msgstr ""
+
+#. Description of the plugin
+#: figma-grid-overlay.php
+msgid "Add a Figma-style visual grid overlay to the frontend to test alignment and spacing in real time. Configure values for different screen sizes from the admin."
+msgstr ""
+
+#. Author of the plugin
+#: figma-grid-overlay.php
+msgid "Harish Chouhan"
+msgstr ""
+
+#. Author URI of the plugin
+#: figma-grid-overlay.php
+msgid "https://harishchouhan.com/"
+msgstr ""
+
+#: admin/settings-page.php:36
+msgid "This tool adds a visual column grid to the frontend of your site. Use it to compare your live layout with your Figma design system."
+msgstr ""
+
+#: admin/settings-page.php:44
+msgid "Enable Overlay"
+msgstr ""
+
+#: admin/settings-page.php:48
+msgid "The grid will be visible on the frontend only when this is enabled."
+msgstr ""
+
+#: admin/settings-page.php:58
+msgid "Mobile (<768px)"
+msgstr ""
+
+#: admin/settings-page.php:59
+msgid "Tablet"
+msgstr ""
+
+#: admin/settings-page.php:60
+msgid "Desktop"
+msgstr ""
+
+#: admin/settings-page.php:61
+msgid "Extended"
+msgstr ""
+
+#: admin/settings-page.php:70
+msgid "Set the column count, gutter size, and outer margin for this breakpoint to match your design system."
+msgstr ""
+
+#. translators: %s is the screen size label (e.g., "Tablet").
+#: admin/settings-page.php:77
+msgid "Enable %s"
+msgstr ""
+
+#: admin/settings-page.php:84
+msgid "Min Width (px)"
+msgstr ""
+
+#: admin/settings-page.php:85
+msgid "Grid will apply at this screen width or larger."
+msgstr ""
+
+#: admin/settings-page.php:94
+msgid "Columns"
+msgstr ""
+
+#: admin/settings-page.php:100
+msgid "Gutter Width (px)"
+msgstr ""
+
+#: admin/settings-page.php:106
+msgid "Outer Margin (px)"
+msgstr ""

@@ -1,0 +1,16 @@
+# Exclude from GitHub ZIP exports
+
+readme.md                 export-ignore
+.editorconfig             export-ignore
+.gitattributes            export-ignore
+.gitignore                export-ignore
+phpcs.xml                 export-ignore
+
+composer.json             export-ignore
+composer.lock             export-ignore
+package.json              export-ignore
+package-lock.json         export-ignore
+
+node_modules/             export-ignore
+.github/                  export-ignore
+tests/                    export-ignore
