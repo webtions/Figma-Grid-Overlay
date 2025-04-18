@@ -2,8 +2,8 @@
 # This file is distributed under the GPL-3.0.
 msgid ""
 msgstr ""
-"Project-Id-Version: Figma Grid Overlay 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/figma-grid-overlay\n"
+"Project-Id-Version: Grid Overlay 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/grid-overlay\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -12,38 +12,38 @@ msgstr ""
 "POT-Creation-Date: 2025-04-11T13:23:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
-"X-Domain: figma-grid-overlay\n"
+"X-Domain: grid-overlay\n"
 
 #. Plugin Name of the plugin
-#: figma-grid-overlay.php
+#: grid-overlay.php
 #: admin/settings-page.php:17
 #: admin/settings-page.php:18
 #: admin/settings-page.php:33
-msgid "Figma Grid Overlay"
+msgid "Grid Overlay"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: figma-grid-overlay.php
-msgid "https://themeist.com/plugins/wordpress/figma-grid-layout/"
+#: grid-overlay.php
+msgid "https://themeist.com/plugins/wordpress/grid-overlay/"
 msgstr ""
 
 #. Description of the plugin
-#: figma-grid-overlay.php
+#: grid-overlay.php
 msgid "Add a Figma-style visual grid overlay to the frontend to test alignment and spacing in real time. Configure values for different screen sizes from the admin."
 msgstr ""
 
 #. Author of the plugin
-#: figma-grid-overlay.php
+#: grid-overlay.php
 msgid "Harish Chouhan"
 msgstr ""
 
 #. Author URI of the plugin
-#: figma-grid-overlay.php
+#: grid-overlay.php
 msgid "https://harishchouhan.com/"
 msgstr ""
 
 #: admin/settings-page.php:36
-msgid "This tool adds a visual column grid to the frontend of your site. Use it to compare your live layout with your Figma design system."
+msgid "This tool adds a visual column grid to the frontend of your site. Use it to compare your live layout with your design system."
 msgstr ""
 
 #: admin/settings-page.php:44

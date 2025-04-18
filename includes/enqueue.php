@@ -2,7 +2,7 @@
 /**
  * Enqueue and render the frontend grid overlay.
  *
- * @package Figma_Grid_Overlay
+ * @package Grid_Overlay
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,27 +12,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Enqueue the inline grid overlay styles if the plugin is enabled.
  */
-function fgo_enqueue_overlay_assets() {
-	$settings = get_option( 'fgo_settings' );
+function gridoverlay_enqueue_overlay_assets() {
+	$settings = get_option( 'gridoverlay_settings' );
 
 	if ( empty( $settings['enabled'] ) ) {
 		return;
 	}
 
-	add_action( 'wp_footer', 'fgo_output_grid_overlay_div' );
+	add_action( 'wp_footer', 'gridoverlay_output_grid_overlay_div' );
 
 	// Register a virtual stylesheet to hold inline styles, with version to prevent caching issues.
-	wp_register_style( 'fgo-overlay', false, [], FGO_PLUGIN_VERSION );
-	wp_enqueue_style( 'fgo-overlay' );
-	wp_add_inline_style( 'fgo-overlay', fgo_generate_grid_css( $settings ) );
+	wp_register_style( 'gridoverlay-overlay', false, [], GRIDOVERLAY_PLUGIN_VERSION );
+	wp_enqueue_style( 'gridoverlay-overlay' );
+	wp_add_inline_style( 'gridoverlay-overlay', gridoverlay_generate_grid_css( $settings ) );
 }
-add_action( 'wp_enqueue_scripts', 'fgo_enqueue_overlay_assets' );
+add_action( 'wp_enqueue_scripts', 'gridoverlay_enqueue_overlay_assets' );
 
 /**
  * Output the overlay div in the footer.
  */
-function fgo_output_grid_overlay_div() {
-	echo '<div class="fgo-grid-overlay"></div>';
+function gridoverlay_output_grid_overlay_div() {
+	echo '<div class="gridoverlay-grid-overlay"></div>';
 }
 
 /**
@@ -41,12 +41,12 @@ function fgo_output_grid_overlay_div() {
  * @param array $settings Grid settings from the plugin options.
  * @return string CSS string.
  */
-function fgo_generate_grid_css( $settings ) {
+function gridoverlay_generate_grid_css( $settings ) {
 	if ( empty( $settings ) ) {
 		return '';
 	}
 
-	$css  = ".fgo-grid-overlay {\n";
+	$css  = ".gridoverlay-grid-overlay {\n";
 	$css .= "	position: fixed;\n";
 	$css .= "	top: 0;\n";
 	$css .= "	left: 0;\n";
@@ -57,7 +57,7 @@ function fgo_generate_grid_css( $settings ) {
 	$css .= "	will-change: transform;\n";
 	$css .= "	-webkit-transform: translate3d(0, 0, 0);\n";
 	$css .= "	-webkit-backface-visibility: hidden;\n";
-	$css .= fgo_gradient_css( $settings['mobile'] ) . "\n";
+	$css .= gridoverlay_gradient_css( $settings['mobile'] ) . "\n";
 	$css .= "}\n";
 
 	foreach ( [ 'tablet', 'desktop', 'extended' ] as $key ) {
@@ -65,8 +65,8 @@ function fgo_generate_grid_css( $settings ) {
 		if ( ! empty( $data['enabled'] ) && ! empty( $data['min_width'] ) ) {
 			$min = intval( $data['min_width'] );
 			$css .= "@media (min-width: {$min}px) {\n";
-			$css .= "	.fgo-grid-overlay {\n";
-			$css .= fgo_gradient_css( $data ) . "\n";
+			$css .= "	.gridoverlay-grid-overlay {\n";
+			$css .= gridoverlay_gradient_css( $data ) . "\n";
 			$css .= "	}\n";
 			$css .= "}\n";
 		}
@@ -81,7 +81,7 @@ function fgo_generate_grid_css( $settings ) {
  * @param array $data Screen settings for a single breakpoint.
  * @return string CSS declarations.
  */
-function fgo_gradient_css( $data ) {
+function gridoverlay_gradient_css( $data ) {
 	$cols         = intval( $data['columns'] );
 	$gutter       = intval( $data['gutter'] );
 	$margin       = intval( $data['outer_margin'] );

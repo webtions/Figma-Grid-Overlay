@@ -1,8 +1,8 @@
 <?php
 /**
- * Register plugin settings for Figma Grid Overlay.
+ * Register plugin settings for Grid Overlay.
  *
- * @package Figma_Grid_Overlay
+ * @package Grid_Overlay
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,21 +12,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Register plugin settings and ensure defaults are merged when retrieving them.
  */
-function fgo_register_settings() {
-	// This plugin uses a custom sanitizer (fgo_sanitize_grid_settings) that strictly validates all settings.
+function gridoverlay_register_settings() {
+	// This plugin uses a custom sanitizer (gridoverlay_sanitize_grid_settings) that strictly validates all settings.
 	register_setting(
-		'fgo_settings_group',
-		'fgo_settings',
+		'gridoverlay_settings_group',
+		'gridoverlay_settings',
 		[
 			'type'              => 'array',
-			'sanitize_callback' => 'fgo_sanitize_grid_settings',
+			'sanitize_callback' => 'gridoverlay_sanitize_grid_settings',
 			'show_in_rest'      => false,
 		]
 	);
 
-	add_filter( 'option_fgo_settings', 'fgo_merge_defaults' );
+	add_filter( 'option_gridoverlay_settings', 'gridoverlay_merge_defaults' );
 }
-add_action( 'admin_init', 'fgo_register_settings' );
+add_action( 'admin_init', 'gridoverlay_register_settings' );
 
 /**
  * Sanitize grid layout settings array submitted via the admin form.
@@ -34,7 +34,7 @@ add_action( 'admin_init', 'fgo_register_settings' );
  * @param array $input Raw settings submitted by the admin user.
  * @return array Sanitized settings ready to be saved.
  */
-function fgo_sanitize_grid_settings( $input ) {
+function gridoverlay_sanitize_grid_settings( $input ) {
 	$output            = [];
 	$output['enabled'] = isset( $input['enabled'] ) ? 1 : 0;
 
@@ -56,7 +56,7 @@ function fgo_sanitize_grid_settings( $input ) {
 /**
  * Set default plugin options upon activation.
  */
-function fgo_set_default_options() {
+function gridoverlay_set_default_options() {
 	$defaults = [
 		'enabled' => 1,
 		'mobile'  => [
@@ -89,8 +89,8 @@ function fgo_set_default_options() {
 		],
 	];
 
-	if ( ! get_option( 'fgo_settings' ) ) {
-		add_option( 'fgo_settings', $defaults );
+	if ( ! get_option( 'gridoverlay_settings' ) ) {
+		add_option( 'gridoverlay_settings', $defaults );
 	}
 }
 
@@ -100,7 +100,7 @@ function fgo_set_default_options() {
  * @param array $options Stored plugin options.
  * @return array Options merged with defaults.
  */
-function fgo_merge_defaults( $options ) {
+function gridoverlay_merge_defaults( $options ) {
 	$defaults = [
 		'mobile'   => [ 'enabled' => 1, 'columns' => 2, 'gutter' => 30, 'outer_margin' => 30, 'min_width' => 0 ],
 		'tablet'   => [ 'enabled' => 1, 'columns' => 4, 'gutter' => 40, 'outer_margin' => 40, 'min_width' => 768 ],
