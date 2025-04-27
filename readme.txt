@@ -4,7 +4,7 @@ Tags: figma, grid, overlay, alignment, columns
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -38,6 +38,11 @@ This version shows the grid for everyone if enabled. A future update might inclu
 1. Settings screen with per-screen options
 
 == Changelog ==
+
+= 1.1.0 =
+* Major improvement: Refactored the frontend grid overlay to use real DOM-based columns instead of a repeating background gradient.
+* The new DOM-based method improves alignment accuracy by adjusting for scrollbar width differences (using corrected 100vw calculations).
+* This change resolves longstanding inconsistencies when aligning layouts against the grid across different browsers and screen sizes.
 
 = 1.0.0 =
 * Initial release

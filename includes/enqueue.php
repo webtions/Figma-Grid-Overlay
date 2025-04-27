@@ -1,6 +1,6 @@
 <?php
 /**
- * Enqueue and render the frontend grid overlay.
+ * Enqueue and render the frontend grid overlay (DOM-based transparent red version).
  *
  * @package Grid_Overlay
  */
@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Enqueue the inline grid overlay styles if the plugin is enabled.
+ * Enqueue the overlay assets if the plugin is enabled.
  */
 function gridoverlay_enqueue_overlay_assets() {
 	$settings = get_option( 'gridoverlay_settings' );
@@ -19,80 +19,124 @@ function gridoverlay_enqueue_overlay_assets() {
 		return;
 	}
 
-	add_action( 'wp_footer', 'gridoverlay_output_grid_overlay_div' );
+	add_action( 'wp_footer', 'gridoverlay_output_grid_overlay_dom' );
 
-	// Register a virtual stylesheet to hold inline styles, with version to prevent caching issues.
-	wp_register_style( 'gridoverlay-overlay', false, [], GRIDOVERLAY_PLUGIN_VERSION );
-	wp_enqueue_style( 'gridoverlay-overlay' );
-	wp_add_inline_style( 'gridoverlay-overlay', gridoverlay_generate_grid_css( $settings ) );
+	// Enqueue a small inline script to generate the DOM grid.
+	wp_register_script( 'gridoverlay-dom-script', false, [], GRIDOVERLAY_PLUGIN_VERSION, true );
+	wp_enqueue_script( 'gridoverlay-dom-script' );
+	wp_add_inline_script( 'gridoverlay-dom-script', gridoverlay_generate_grid_dom_js( $settings ) );
+
+	// Enqueue basic styles.
+	wp_register_style( 'gridoverlay-dom-style', false, [], GRIDOVERLAY_PLUGIN_VERSION );
+	wp_enqueue_style( 'gridoverlay-dom-style' );
+	wp_add_inline_style( 'gridoverlay-dom-style', gridoverlay_generate_grid_dom_css() );
 }
 add_action( 'wp_enqueue_scripts', 'gridoverlay_enqueue_overlay_assets' );
 
 /**
- * Output the overlay div in the footer.
+ * Output the overlay container div in the footer.
  */
-function gridoverlay_output_grid_overlay_div() {
-	echo '<div class="gridoverlay-grid-overlay"></div>';
+function gridoverlay_output_grid_overlay_dom() {
+	echo '<div class="gridoverlay-grid-overlay-wrapper" id="gridoverlay-grid-overlay"></div>';
 }
 
 /**
- * Generate inline CSS for all screen sizes based on saved settings.
+ * Generate the JavaScript to dynamically create the grid columns.
  *
  * @param array $settings Grid settings from the plugin options.
- * @return string CSS string.
+ * @return string JavaScript code.
  */
-function gridoverlay_generate_grid_css( $settings ) {
-	if ( empty( $settings ) ) {
-		return '';
-	}
+function gridoverlay_generate_grid_dom_js( $settings ) {
+	$mobile    = $settings['mobile'] ?? [ 'columns' => 2, 'gutter' => 30, 'outer_margin' => 30, 'min_width' => 0 ];
+	$tablet    = $settings['tablet'] ?? [ 'columns' => 4, 'gutter' => 40, 'outer_margin' => 40, 'min_width' => 768 ];
+	$desktop   = $settings['desktop'] ?? [ 'columns' => 6, 'gutter' => 60, 'outer_margin' => 60, 'min_width' => 1280 ];
+	$extended  = $settings['extended'] ?? [ 'columns' => 6, 'gutter' => 120, 'outer_margin' => 160, 'min_width' => 1920 ];
 
-	$css  = ".gridoverlay-grid-overlay {\n";
-	$css .= "	position: fixed;\n";
-	$css .= "	top: 0;\n";
-	$css .= "	left: 0;\n";
-	$css .= "	right: 0;\n";
-	$css .= "	bottom: 0;\n";
-	$css .= "	pointer-events: none;\n";
-	$css .= "	z-index: 9999;\n";
-	$css .= "	will-change: transform;\n";
-	$css .= "	-webkit-transform: translate3d(0, 0, 0);\n";
-	$css .= "	-webkit-backface-visibility: hidden;\n";
-	$css .= gridoverlay_gradient_css( $settings['mobile'] ) . "\n";
-	$css .= "}\n";
+	return "
+	(function() {
+		const container = document.getElementById('gridoverlay-grid-overlay');
 
-	foreach ( [ 'tablet', 'desktop', 'extended' ] as $key ) {
-		$data = $settings[ $key ];
-		if ( ! empty( $data['enabled'] ) && ! empty( $data['min_width'] ) ) {
-			$min = intval( $data['min_width'] );
-			$css .= "@media (min-width: {$min}px) {\n";
-			$css .= "	.gridoverlay-grid-overlay {\n";
-			$css .= gridoverlay_gradient_css( $data ) . "\n";
-			$css .= "	}\n";
-			$css .= "}\n";
+		function updateGridOverlay() {
+			if (!container) return;
+			container.innerHTML = '';
+
+			let columns = {$mobile['columns']};
+			let gutter = {$mobile['gutter']};
+			let outerMargin = {$mobile['outer_margin']};
+
+			if (window.innerWidth >= {$extended['min_width']}) {
+				columns = {$extended['columns']};
+				gutter = {$extended['gutter']};
+				outerMargin = {$extended['outer_margin']};
+			} else if (window.innerWidth >= {$desktop['min_width']}) {
+				columns = {$desktop['columns']};
+				gutter = {$desktop['gutter']};
+				outerMargin = {$desktop['outer_margin']};
+			} else if (window.innerWidth >= {$tablet['min_width']}) {
+				columns = {$tablet['columns']};
+				gutter = {$tablet['gutter']};
+				outerMargin = {$tablet['outer_margin']};
+			}
+
+			document.documentElement.style.setProperty('--gridoverlay-grid-columns', columns);
+			document.documentElement.style.setProperty('--gridoverlay-grid-gutter', gutter + 'px');
+			document.documentElement.style.setProperty('--gridoverlay-grid-outer-margin', outerMargin + 'px');
+			document.documentElement.style.setProperty('--gridoverlay-grid-corrected-width', 'calc(100vw - (100vw - 100%))');
+			document.documentElement.style.setProperty('--gridoverlay-grid-column-width',
+				`calc((var(--gridoverlay-grid-corrected-width) - (var(--gridoverlay-grid-outer-margin) * 2) - (var(--gridoverlay-grid-gutter) * (\${columns} - 1))) / \${columns})`
+			);
+
+			for (let i = 0; i < columns; i++) {
+				const div = document.createElement('div');
+				div.className = 'gridoverlay-grid-column';
+				container.appendChild(div);
+			}
 		}
-	}
 
-	return $css;
+		window.addEventListener('resize', updateGridOverlay);
+		window.addEventListener('DOMContentLoaded', updateGridOverlay);
+	})();
+	";
 }
 
 /**
- * Generate the gradient and margin styles for a given breakpoint.
+ * Generate the basic CSS for the grid overlay.
  *
- * @param array $data Screen settings for a single breakpoint.
- * @return string CSS declarations.
+ * @return string CSS code.
  */
-function gridoverlay_gradient_css( $data ) {
-	$cols         = intval( $data['columns'] );
-	$gutter       = intval( $data['gutter'] );
-	$margin       = intval( $data['outer_margin'] );
-	$column_width = "(100vw - " . ( 2 * $margin ) . "px - " . ( $cols - 1 ) . " * " . $gutter . "px) / " . $cols;
+function gridoverlay_generate_grid_dom_css() {
+	return "
+	.gridoverlay-grid-overlay-wrapper {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		pointer-events: none;
+		z-index: 9999;
+		width: calc(100vw - (100vw - 100%));
+		height: 100%;
+		display: flex;
+		box-sizing: border-box;
+		justify-content: flex-start;
+		align-items: stretch;
+	}
 
-	return "	background: repeating-linear-gradient(
-		90deg,
-		rgba(255, 0, 0, 0.1),
-		rgba(255, 0, 0, 0.1) calc($column_width),
-		transparent calc($column_width),
-		transparent calc($column_width + {$gutter}px)
-	);
-	margin: 0 {$margin}px;";
+	.gridoverlay-grid-column {
+		flex: 0 0 auto;
+		width: var(--gridoverlay-grid-column-width);
+		height: 100%;
+		background-color: rgba(255, 0, 0, 0.1);
+		margin-right: var(--gridoverlay-grid-gutter);
+		box-sizing: border-box;
+	}
+
+	.gridoverlay-grid-column:first-child {
+		margin-left: var(--gridoverlay-grid-outer-margin);
+	}
+
+	.gridoverlay-grid-column:last-child {
+		margin-right: var(--gridoverlay-grid-outer-margin);
+	}
+	";
 }
